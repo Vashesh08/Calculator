@@ -1,8 +1,4 @@
-try :
-    import tkinter
-except ImportError:
-    import Tkinter as tkinter
-
+import tkinter
 import tkinter.font
 
 
@@ -113,15 +109,18 @@ class Calculator(object):
             answer.set("{}".format(self._result))
         self.command_count = 0
         self.iterative = 0
+        self.function = '='
 
     def _get_result(self):
         return self._result
 
-    def _set_result(self):
-        self._result = 0
+    def _set_result(self, result):
+        self._result = result
 
     def numbers(self, parameter):
         global answer
+        if self.function == '=':
+            self.clear()
         if self.point_var is False:
             if self.iterative == self.command_count != 0:
                 if self.a and self.b is not None and self._result is not None:
@@ -207,15 +206,24 @@ label.grid(row=0, column=0, columnspan=4, sticky='e', padx=2, pady=2)
 
 Calculator_command = Calculator()
 
-Calculator_command_list = [[('AC', 1, lambda: Calculator_command.clear()), ("+/-", 1, lambda: Calculator_command.negative()),
-                            ("%", 1, lambda: Calculator_command.percent()), ("÷", 1,  lambda: Calculator_command.divide())],
-                           [('7', 1, lambda: Calculator_command.numbers(7)), ('8', 1, lambda: Calculator_command.numbers(8)),
-                            ('9', 1, lambda: Calculator_command.numbers(9)), ('x', 1, lambda: Calculator_command.multiply())],
-                           [('4', 1, lambda: Calculator_command.numbers(4)), ('5', 1, lambda: Calculator_command.numbers(5)),
-                            ('6', 1, lambda: Calculator_command.numbers(6)), ('-', 1, lambda: Calculator_command.subtract())],
-                           [('1', 1, lambda: Calculator_command.numbers(1)), ('2', 1, lambda: Calculator_command.numbers(2)),
-                            ('3', 1, lambda: Calculator_command.numbers(3)), ('+', 1, lambda: Calculator_command.add())],
-                           [('0', 2, lambda: Calculator_command.numbers(0)), ('.', 1, lambda: Calculator_command.point()),
+Calculator_command_list = [[('AC', 1, lambda: Calculator_command.clear()),
+                            ("+/-", 1, lambda: Calculator_command.negative()),
+                            ("%", 1, lambda: Calculator_command.percent()),
+                            ("÷", 1, lambda: Calculator_command.divide())],
+                           [('7', 1, lambda: Calculator_command.numbers(7)),
+                            ('8', 1, lambda: Calculator_command.numbers(8)),
+                            ('9', 1, lambda: Calculator_command.numbers(9)),
+                            ('x', 1, lambda: Calculator_command.multiply())],
+                           [('4', 1, lambda: Calculator_command.numbers(4)),
+                            ('5', 1, lambda: Calculator_command.numbers(5)),
+                            ('6', 1, lambda: Calculator_command.numbers(6)),
+                            ('-', 1, lambda: Calculator_command.subtract())],
+                           [('1', 1, lambda: Calculator_command.numbers(1)),
+                            ('2', 1, lambda: Calculator_command.numbers(2)),
+                            ('3', 1, lambda: Calculator_command.numbers(3)),
+                            ('+', 1, lambda: Calculator_command.add())],
+                           [('0', 2, lambda: Calculator_command.numbers(0)),
+                            ('.', 1, lambda: Calculator_command.point()),
                             ('=', 1, lambda: Calculator_command.equals())],
                            ]
 
