@@ -158,6 +158,12 @@ class Calculator(object):
         self.iterative = 0
         self.function = '='
 
+    def _get_result(self):
+        return self._result
+
+    def _set_result(self, result):
+        self._result = result
+
     def numbers(self, parameter):
         global answer
         if self.function == '=':
