@@ -12,8 +12,23 @@ class Calculator(object):
         self.command_count = 0
         self.iterative = 0
         self.point_var = False
+        self._method = True
+
+    def method(self):
+        self._method = False
+        if "+" == self.function:
+            self.add()
+        elif '-' == self.function:
+            self.subtract()
+        elif '*' == self.function:
+            self.multiply()
+        elif '/' == self.function:
+            self.divide()
 
     def point(self):
+        if self._method:
+            self.method()
+            self._method = True
         global answer
         if self.a is None:
             answer.set("{}.".format(self.a))
@@ -28,6 +43,12 @@ class Calculator(object):
 
     def add(self):
         global answer
+        if '-' == self.function:
+            self.subtract()
+        elif '*' == self.function:
+            self.multiply()
+        elif '/' == self.function:
+            self.divide()
         if self.b is not None:
             self._result = self.a + self.b
             self.a = self._result
@@ -38,6 +59,16 @@ class Calculator(object):
 
     def subtract(self):
         global answer
+        if "+" == self.function:
+            self.add()
+        elif '*' == self.function:
+            self.multiply()
+        elif '/' == self.function:
+            self.divide()
+        if self.function == '*':
+            self.multiply()
+        elif self.function == '/':
+            self.divide()
         if self.b is not None:
             self._result = self.a - self.b
             self.a = self._result
@@ -48,7 +79,14 @@ class Calculator(object):
 
     def multiply(self):
         global answer
-        if self.a and self.b is not None:
+        if "+" == self.function:
+            self.add()
+        elif '-' == self.function:
+            self.subtract()
+        elif '/' == self.function:
+            self.divide()
+
+        if self.b is not None:
             self._result = self.a * self.b
             self.a = self._result
             self.b = None
@@ -58,11 +96,21 @@ class Calculator(object):
 
     def divide(self):
         global answer
+        if "+" == self.function:
+            self.add()
+        elif '-' == self.function:
+            self.subtract()
+        elif '*' == self.function:
+            self.multiply()
+
         if self.b is not None:
             if self.b == 0:
                 self._result = 0
             else:
-                self._result = self.a / self.b
+                if self.a % self.b == 0:
+                    self._result = self.a // self.b
+                else:
+                    self._result = self.a / self.b
             answer.set("{}".format(self._result))
             self.a = self._result
             self.b = None
@@ -82,6 +130,9 @@ class Calculator(object):
 
     def negative(self):
         global answer
+        if self._method:
+            self.method()
+            self._method = True
         if self.a is not None:
             self._result = -self.a
             self.a *= -1
@@ -89,6 +140,9 @@ class Calculator(object):
 
     def percent(self):
         global answer
+        if self._method:
+            self.method()
+            self._method = True
         if self.a is not None:
             self._result = self.a / 100
             self.a = self._result
@@ -97,14 +151,7 @@ class Calculator(object):
 
     def equals(self):
         global answer
-        if "+" == self.function:
-            self.add()
-        elif '-' == self.function:
-            self.subtract()
-        elif '*' == self.function:
-            self.multiply()
-        elif '/' == self.function:
-            self.divide()
+        self.method()
         if self._result is not None:
             answer.set("{}".format(self._result))
         self.command_count = 0
